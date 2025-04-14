@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace Core.Repository.Interfaces
 {
-    public interface IBirthdayReminder
+    public interface IServiceRepository
     {
-        Task BirthdayValidator();
     }
 }

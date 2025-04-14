@@ -9,9 +9,9 @@ namespace Core.Entities.HBD
     public class BirthdayDto
     {
         public string Name { get; set; }
-        public DateTime? BornDate { get; set; }
+        public DateTime BornDate { get; set; }
         public BirthdayDto() { }
-        public BirthdayDto(string name, DateTime? date)
+        public BirthdayDto(string name, DateTime date)
         {
             this.Name = name;
             this.BornDate = date;
@@ -34,8 +34,30 @@ namespace Core.Entities.HBD
         {
             return new List<BirthdayDto>
             {
-                new BirthdayDto("", new DateTime())
+                new BirthdayDto("Marce", new DateTime()),
+                new BirthdayDto("Mariana", new DateTime()),
+                new BirthdayDto("La gorda", new DateTime()),
+                new BirthdayDto("Malon", new DateTime()),
+                new BirthdayDto("El niño", new DateTime(2001, 1, 17)),
+
             };
+        }
+        public DateTime GetNextBD()
+        {
+            DateTime hoy = DateTime.Now;
+            int dateDif = hoy.Year - this.BornDate.Year;
+            DateTime hbdThisYear = this.BornDate.AddYears(dateDif);
+            if(hbdThisYear <= hoy)
+            {
+                return hbdThisYear.AddYears(1);
+            }
+            return hbdThisYear;
+        }
+        public bool FifteenDaysOrLess()
+        {
+            DateTime today = DateTime.Now;
+            TimeSpan diferencia = (this.GetNextBD() - today);
+            return diferencia.Days <= 15 ? true : false;
         }
 
     }

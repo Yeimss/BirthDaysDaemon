@@ -1,23 +1,28 @@
-﻿namespace BirthDayDaemon
+﻿using Core.Repository.Interfaces;
+
+namespace BirthDayDaemon
 {
     public class HBDHost : BackgroundService
     {
         private readonly ILogger<HBDHost> _logger;
+        private readonly IServiceScopeFactory _scopeFactory;
 
-        public HBDHost(ILogger<HBDHost> logger)
+        public HBDHost(ILogger<HBDHost> logger, IServiceScopeFactory scopeFactory)
         {
             _logger = logger;
+            _scopeFactory = scopeFactory;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                if (_logger.IsEnabled(LogLevel.Information))
+                using (var scope = _scopeFactory.CreateScope())
                 {
-                    _logger.LogInformation("Host para los cumpleaños corriendo a las: {time}", DateTimeOffset.Now);
+                    var birthdayReminder = scope.ServiceProvider.GetRequiredService<IBirthdayReminder>();
+                    await birthdayReminder.BirthdayValidator();
                 }
-                await Task.Delay(1000, stoppingToken);
+                await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
             }
         }
     }
