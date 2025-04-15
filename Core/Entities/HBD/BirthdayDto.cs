@@ -9,12 +9,14 @@ namespace Core.Entities.HBD
     public class BirthdayDto
     {
         public string Name { get; set; }
+        public string Email { get; set; }
         public DateTime BornDate { get; set; }
         public BirthdayDto() { }
-        public BirthdayDto(string name, DateTime date)
+        public BirthdayDto(string name, DateTime date, string email = "")
         {
             this.Name = name;
             this.BornDate = date;
+            this.Email = email;
         }
         public List<BirthdayDto> GetMaiKingsBirthdays()
         {
@@ -27,7 +29,7 @@ namespace Core.Entities.HBD
                 new BirthdayDto("Harold", new DateTime(1998, 12, 11)),
                 new BirthdayDto("El Brayan", new DateTime(2000, 6, 19)),
                 new BirthdayDto("Ieremaia", new DateTime(2002, 1, 18)),
-                new BirthdayDto("El Yeyei", new DateTime(2001, 1, 17)),
+                new BirthdayDto("El Yeyei", new DateTime(2001, 1, 17), "JamesHerrera364@gmail.com"),
             };
         }
         public List<BirthdayDto> GetMaiQueensBirthdays()
@@ -57,7 +59,7 @@ namespace Core.Entities.HBD
         {
             DateTime today = DateTime.Now;
             TimeSpan diferencia = (this.GetNextBD() - today);
-            return diferencia.Days <= 15 ? true : false;
+            return diferencia.Days <= 20 ? true : false;
         }
 
     }

@@ -11,19 +11,22 @@ namespace Core.Repository.Implementation
 {
     public class BirthdayReminder : IBirthdayReminder
     {
+        private readonly IServiceRepository _serviceRepository;
+        public BirthdayReminder(IServiceRepository serviceRepository)
+        {
+            _serviceRepository = serviceRepository;
+        }
         public async Task BirthdayValidator()
         {
             BirthdayDto birthday = new BirthdayDto();
             List<BirthdayDto> ListBirthday = birthday.GetMaiKingsBirthdays();
-            Console.WriteLine("{0,-15} | {1,-10}", "Nombre", "Cumple");
+            List<BirthdayDto> siguientesCums = ListBirthday.Where(c => (c.GetNextBD() - DateTime.Now).Days <= 20).ToList();
+            _serviceRepository.EnviarInvitacion(
+                string.Join(";",
+                    ListBirthday.Where(r => !r.Email.Equals("")).Select(r => r.Email).ToArray()
+                ),
+                siguientesCums.Where(r => !r.Name.Equals("")).Select(r => r.Name).ToArray());
 
-            foreach (BirthdayDto bDay in ListBirthday)
-            {
-                if (bDay.FifteenDaysOrLess())
-                {
-                    Console.WriteLine("{0,-15} | {1,-10}", bDay.Name, bDay.GetNextBD().ToString("yyyy-MM-dd"));
-                }
-            }
         }
     }
 }
