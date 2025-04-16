@@ -8,6 +8,6 @@ namespace Core.Repository.Interfaces
 {
     public interface IServiceRepository
     {
-        bool EnviarInvitacion(string correos, string[] cumpleaneros);
+        bool EnviarInvitacion(string correos, string[] cumpleaneros, DateTime siguienteCum);
     }
 }

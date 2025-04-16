@@ -11,14 +11,14 @@ namespace Core.Repository.Implementation
         {
             _configuration = configuration;
         }
-        public bool EnviarInvitacion(string correos, string[] cumpleaneros)
+        public bool EnviarInvitacion(string correos, string[] cumpleaneros, DateTime siguienteCum)
         {
             try
             {
                 string correo = _configuration["EmailSettings:Email"]!;
                 string psw = _configuration["EmailSettings:Password"]!;
                 GmailService gmailService = new GmailService();
-                gmailService.EnviarInvitacion(correo, correos, $"Cumpleaños de {string.Join(", ", cumpleaneros)}" ,psw);
+                gmailService.EnviarInvitacion(correo, correos.Split(";"), $"Cumpleaños de {string.Join(", ", cumpleaneros)}" ,psw, siguienteCum);
                 return true;
             }catch (Exception ex)
             {

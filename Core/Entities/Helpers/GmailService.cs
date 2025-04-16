@@ -4,11 +4,11 @@ using System.Text;
 
 public class GmailService
 {
-    public void EnviarInvitacion(string from, string to, string motivo, string password)
+    public void EnviarInvitacion(string from, string[] to, string motivo, string password, DateTime EventDate)
     {
         try
         {
-            var startTime = DateTime.Now.AddHours(1);
+            var startTime = new DateTime(EventDate.Year, EventDate.Month, EventDate.Day, 15, 0, 0);
             var endTime = startTime.AddHours(1);
 
             string ical = $@"BEGIN:VCALENDAR
@@ -33,9 +33,12 @@ END:VCALENDAR";
 
             var correo = new MailMessage();
             correo.From = new MailAddress(from);
-            correo.To.Add(to);
+            foreach (var item in to)
+            {
+                correo.To.Add(item);
+            }
             correo.Subject = motivo;
-            correo.Body = "Hola, teniendo en cuenta los increibles acontecimientos que se avecinan ({}), estás cordialmente invitado a que nos encontremos a reirnos y a gozar de la vida en esta fecha.";
+            correo.Body = $"Hola, teniendo en cuenta los increibles acontecimientos que se avecinan ({motivo}), estás cordialmente invitado a que nos encontremos a reirnos y a gozar de la vida en esta fecha.";
             correo.IsBodyHtml = false;
 
             var calendarBytes = Encoding.UTF8.GetBytes(ical);

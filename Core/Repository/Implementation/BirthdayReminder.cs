@@ -25,7 +25,8 @@ namespace Core.Repository.Implementation
                 string.Join(";",
                     ListBirthday.Where(r => !r.Email.Equals("")).Select(r => r.Email).ToArray()
                 ),
-                siguientesCums.Where(r => !r.Name.Equals("")).Select(r => r.Name).ToArray());
+                siguientesCums.Where(r => !r.Name.Equals("")).Select(r => r.Name).ToArray(),
+                siguientesCums.Min(r => r.CloserWeekend));
 
         }
     }

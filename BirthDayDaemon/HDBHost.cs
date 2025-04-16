@@ -22,7 +22,7 @@ namespace BirthDayDaemon
                     var birthdayReminder = scope.ServiceProvider.GetRequiredService<IBirthdayReminder>();
                     await birthdayReminder.BirthdayValidator();
                 }
-                await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
+                await Task.Delay(TimeSpan.FromDays(1), stoppingToken);
             }
         }
     }

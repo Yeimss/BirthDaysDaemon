@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,18 +12,20 @@ namespace Core.Entities.HBD
         public string Name { get; set; }
         public string Email { get; set; }
         public DateTime BornDate { get; set; }
+        public DateTime CloserWeekend { get; set; }
         public BirthdayDto() { }
         public BirthdayDto(string name, DateTime date, string email = "")
         {
             this.Name = name;
             this.BornDate = date;
             this.Email = email;
+            this.CloserWeekend = this.GetCloserWeekend();
         }
         public List<BirthdayDto> GetMaiKingsBirthdays()
         {
             return new List<BirthdayDto>{
                 new BirthdayDto("Kevon", new DateTime(2000, 5, 2)),
-                new BirthdayDto("Maiqui", new DateTime(1999, 7, 11)),
+                new BirthdayDto("Maiqui", new DateTime(1999, 7, 11), "maicolgarcia1221@gmail.com"),
                 new BirthdayDto("El Mecias", new DateTime(1999, 5, 2)),
                 new BirthdayDto("Busta", new DateTime(2000, 8, 6)),
                 new BirthdayDto("Mora", new DateTime(1999, 9, 1)),
@@ -59,7 +62,27 @@ namespace Core.Entities.HBD
         {
             DateTime today = DateTime.Now;
             TimeSpan diferencia = (this.GetNextBD() - today);
-            return diferencia.Days <= 20 ? true : false;
+            return diferencia.Days <= 15 ? true : false;
+        }
+        public DateTime GetCloserWeekend()
+        {
+            DateTime nextBd = this.GetNextBD();
+            if (GetNextBD().DayOfWeek == DayOfWeek.Saturday || GetNextBD().DayOfWeek == DayOfWeek.Sunday)
+            {
+                return nextBd;
+            }
+            else
+            {
+                if ((int)nextBd.DayOfWeek <= 3)
+                {
+                    return nextBd.AddDays(-(int)nextBd.DayOfWeek - 1);
+                }
+                else
+                {
+                    int sumarDias = nextBd.DayOfWeek == DayOfWeek.Thursday ? 2 : 1;
+                    return nextBd.AddDays((int)nextBd.DayOfWeek + sumarDias);
+                }
+            }
         }
 
     }
